@@ -68,7 +68,7 @@ $ source env/bin/activate
 
 To run the website locally, follow these following steps:
 
-Make sure you are already in the Python virtual environment
+Make sure you are already in the Python virtual environment with env/bin/activate
 ```
 $ source env/bin/activate
 ```
@@ -81,7 +81,7 @@ $ chmod +x ./bin/run.sh
 $ ./bin/run.sh
 ```
 
-Then open your browser and go to http://localhost:8001/
+Then open your browser and go to http://localhost:3000/
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
