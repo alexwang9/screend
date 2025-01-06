@@ -4,8 +4,9 @@ import axios from 'axios';
 function App() {
   const [message, setMessage] = useState('');
   const [prompt, setPrompt] = useState('horror');
-  const [titleList, setTitleList] = useState([]);
-  
+  const [similar, setSimilar] = useState([]);
+  const [titleList, setTitleList] = useState({});
+
   /*
   THE CODE WORKS, IT'S JUST THAT WHEN YOU TYPE IN A PROMPT, 
   IT HAS TO HIT KEYWORDS FOR ACTUAL MOVIES OR ELSE TMDB WON'T RETURN ANYTHING.
@@ -17,7 +18,7 @@ function App() {
     axios.get('/api/recommend_shows', {
       params: {
         prompt: prompt,
-        similar_ids: titleList
+        similar_ids: similar
       }
     })
       .then((response) => {
@@ -30,8 +31,7 @@ function App() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>React + Flask Example</h1>
-      <p>Message from Flask: {message}</p>
+      <h1>Recommended Shows</h1>
     </div>
   );
 }
