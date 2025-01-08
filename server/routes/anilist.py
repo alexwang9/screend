@@ -66,7 +66,6 @@ def query_anilist(name):
         print(f"Error: {response.status_code}, {response.text}")
         return None
 
-# NOT GOOD, LOTS OF NAMES DON'T MATCH ANILIST SEARCH
 def recommend_manga(prompt):
     names = call_openai(prompt)
     recommendations = []

@@ -44,7 +44,7 @@ function App() {
       ) : (
         <p>Loading recommendations...</p>
       )} */}
-      <h1>Recommended Mange</h1>
+      <h1>Recommended Manga</h1>
       {titleList.length > 0 ? (
         <ul>
           {titleList.map((manga, index) => (
