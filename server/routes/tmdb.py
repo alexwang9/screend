@@ -33,42 +33,60 @@ def extract_keywords(prompt):
 # HELPER
 # Input: important keywords from user prompt
 # Output: list of 25 recommended tv shows
-def call_openai(prompt):
-    completion = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are an assistant designed to return a list of 25 recommended tv show names based on inputted keywords about what kind of show the user wants to watch. Return the list of shows as names, separated by commas with no spaces in between show names. The show names themselves may have spaces in them"
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
-    response = completion.choices[0].message.content
-    tv_shows = response.split(',')
+def call_openai(prompt, media_type):
+    response = ""
+    if media_type == "tv":
+        completion = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are an assistant designed to return a list of 35 recommended tv show names based on inputted keywords about what kind of show the user wants to watch. Return the list of shows as names, separated by commas with no spaces in between show names. The show names themselves may have spaces in them"
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+        response = completion.choices[0].message.content
+    
+    elif media_type == "movie":
+        completion = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are an assistant designed to return a list of 25 recommended movie names based on inputted keywords about what kind of movie the user wants to watch. Return the list of movies as names, separated by commas with no spaces in between movie names. The movie names themselves may have spaces in them"
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+        response = completion.choices[0].message.content
+    names = response.split(',')
 
-    return(tv_shows)
+    return(names)
 
 # HELPER
 # Input: user prompt
 # Output: json list of shows from tmdb database
-def search_shows(prompt):
+def search_shows_movies(prompt, media_type):
     keywords = extract_keywords(prompt)
     query = " ".join(keywords)
 
-    shows = call_openai(query)
+    names = call_openai(query, media_type)
 
-    url = "https://api.themoviedb.org/3/search/tv"
+    url = f"https://api.themoviedb.org/3/search/{media_type}"
 
-    top_shows = []
+    top_names = []
 
-    for show in shows:
+    for name in names:
         params = {
             "api_key": TMDB_API_KEY,
-            "query": show,
+            "query": name,
             "language": "en-US",
             "page": 1
         }
@@ -76,16 +94,16 @@ def search_shows(prompt):
         if response.status_code == 200:
             results = response.json().get("results", [])
             if results:
-                top_shows.append(results[0])
+                top_names.append(results[0])
         else:
-            print(f"Error fetching data for {show}: {response.status_code}, {response.text}")
-    return top_shows
+            print(f"Error fetching data for {name}: {response.status_code}, {response.text}")
+    return top_names
 
 # HELPER
 # Input: show tv_id corresponding to tmdb database
 # Output: a json list of similar shows
-def get_similar_shows(tv_id):
-    url = f"https://api.themoviedb.org/3/tv/{tv_id}/similar"
+def get_similar_media(similar_id, media_type):
+    url = f"https://api.themoviedb.org/3/{media_type}/{similar_id}/similar"
     params = {
         "api_key": TMDB_API_KEY,
         "language": "en-US",
@@ -100,14 +118,17 @@ def get_similar_shows(tv_id):
 
 # Input: user prompt and list of similar show ids
 # Output: 25 shows sorted in recommendation order
-def recommend_shows(prompt, similar_show_ids):
-    search_results = search_shows(prompt)
+def recommend_shows_movies(prompt, similar_ids, media_type):
+    search_results = []
+    if media_type == "tv" or media_type == "movie":
+        search_results = search_shows_movies(prompt, media_type)
+
 
     similar_results = []
-    for tv_id in similar_show_ids:
-        similar_results.extend(get_similar_shows(tv_id))
+    for similar_id in similar_ids:
+        similar_results.extend(get_similar_media(similar_id, media_type))
 
-    combined_results = {show["id"]: show for show in search_results + similar_results}.values()
+    combined_results = {media["id"]: media for media in search_results + similar_results}.values()
 
     sorted_results = sorted(combined_results, key=lambda x: x.get("vote_average", 0), reverse=True)
 
@@ -115,7 +136,7 @@ def recommend_shows(prompt, similar_show_ids):
 
 def search(name, media_type):
     if media_type == "movie" or media_type == "tv":
-        url = "https://api.themoviedb.org/3/search/{media_type}"
+        url = f"https://api.themoviedb.org/3/search/{media_type}"
         params = {
             "api_key": TMDB_API_KEY,
             "query": name,

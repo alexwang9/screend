@@ -16,11 +16,12 @@ def search_show():
 def recommendations():
 
     prompt = request.args.get('prompt')
-    similar_id = request.args.getlist('similar_id')
-    media_type = request.args.get('media_type')
+    similar_ids = request.args.getlist('similar_ids')
+    media_type = request.args.get('media_type') # tv or movie
 
-    if not prompt and not similar_id:
+    if not prompt and not similar_ids:
         return jsonify({"error": "Prompt or similar_ids required"}), 400
 
-    recommendations = recommend_shows(prompt, similar_id)
+    if media_type == "tv" or media_type == "movie":
+        recommendations = recommend_shows_movies(prompt, similar_ids, media_type)
     return jsonify(recommendations)
