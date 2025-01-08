@@ -3,9 +3,9 @@ import axios from 'axios';
 
 function App() {
   const [message, setMessage] = useState('');
-  const [prompt, setPrompt] = useState('funny and scary');
+  const [prompt, setPrompt] = useState('something similar to sousou no frieren');
   const [similar, setSimilar] = useState([]);
-  const [mediaType, setMediaType] = useState('movie')
+  const [mediaType, setMediaType] = useState('manga')
   const [titleList, setTitleList] = useState([]);
 
   useEffect(() => {
@@ -27,13 +27,26 @@ function App() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>Recommended Shows</h1>
+      {/* <h1>Recommended Shows</h1>
       {titleList.length > 0 ? (
         <ul>
           {titleList.map((show, index) => (
             <li key={show.id}>
               <strong>{show.title}</strong>
               {show.vote_average && ` - Rating: ${show.vote_average}`}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>Loading recommendations...</p>
+      )} */}
+      <h1>Recommended Mange</h1>
+      {titleList.length > 0 ? (
+        <ul>
+          {titleList.map((manga, index) => (
+            <li key={manga.id}>
+              <strong>{manga.title}</strong>
+              {manga.averageScore && ` - Rating: ${manga.averageScore}`}
             </li>
           ))}
         </ul>

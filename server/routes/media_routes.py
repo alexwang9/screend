@@ -1,10 +1,11 @@
 # server/routes/media_routes.py
 from flask import Blueprint, jsonify, request
 from routes.tmdb import *
+from routes.anilist import *
 
 media_routes = Blueprint('media_routes', __name__)
 
-@media_routes.route('/search_show', methods=['GET'])
+@media_routes.route('/search_show_movie', methods=['GET'])
 def search_show():
     name = request.args.get('name')
     media_type = request.args.get('media_type')
@@ -24,4 +25,7 @@ def recommendations():
 
     if media_type == "tv" or media_type == "movie":
         recommendations = recommend_shows_movies(prompt, similar_ids, media_type)
+    elif media_type == "manga":
+        recommendations = recommend_manga(prompt)
+    
     return jsonify(recommendations)

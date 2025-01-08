@@ -41,7 +41,7 @@ def call_openai(prompt, media_type):
             messages=[
                 {
                     "role": "system",
-                    "content": "You are an assistant designed to return a list of 35 recommended tv show names based on inputted keywords about what kind of show the user wants to watch. Return the list of shows as names, separated by commas with no spaces in between show names. The show names themselves may have spaces in them"
+                    "content": "You are an assistant designed to return a list of 35 recommended tv show names based on inputted keywords about what kind of show the user wants to watch. Return the list of shows as names, separated by commas with no spaces in between show names. The show names themselves may have spaces in them."
                 },
                 {
                     "role": "user",
