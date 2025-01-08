@@ -25,6 +25,10 @@ function App() {
       });
   }, []);
 
+  // titleList.forEach((manga, index) => {
+  //   console.log(manga.title);
+  // });
+
   return (
     <div style={{ padding: '20px' }}>
       {/* <h1>Recommended Shows</h1>

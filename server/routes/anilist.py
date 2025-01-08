@@ -33,16 +33,18 @@ def query_anilist(name):
     url = "https://graphql.anilist.co"
     query = """
     query($search: String) {
-        Media(search: $search, type: MANGA) {
-            id
-            title {
-                english
-            }
-            genres
-            description
-            averageScore
-            coverImage {
-                medium
+        Page {
+            media(search: $search, type: MANGA) {
+                id
+                title {
+                    english
+                }
+                genres
+                description
+                averageScore
+                coverImage {
+                    medium
+                }
             }
         }
     }
@@ -53,9 +55,10 @@ def query_anilist(name):
     response = requests.post(url, json={'query': query, 'variables': variables})
 
     if response.status_code == 200:
-        data = response.json()["data"]["Media"]
-        if data:
-            return data  # Return the first result
+        data = response.json()["data"]["Page"]
+        if data and data.get("media"):
+            # print(data)
+            return data["media"][0]  # Return the first result
         else:
             print(f"No results found for manga: {name}")
             return None
@@ -68,9 +71,16 @@ def recommend_manga(prompt):
     names = call_openai(prompt)
     recommendations = []
     for name in names:
-        print(name)
         result = query_anilist(name)
+        print(result)
         if result:
-            recommendations.extend(result)
+            recommendations.append({
+                'id': result['id'],
+                'title': result['title']['english'] or 'N/A',
+                'genres': result['genres'],
+                'description': result['description'],
+                'averageScore': result['averageScore'],
+                'coverImage': result['coverImage']['medium']
+            })
 
     return recommendations
