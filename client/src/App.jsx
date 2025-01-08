@@ -3,22 +3,18 @@ import axios from 'axios';
 
 function App() {
   const [message, setMessage] = useState('');
-  const [prompt, setPrompt] = useState('horror');
-  const [similar, setSimilar] = useState([]);
+  const [prompt, setPrompt] = useState('im feeling something scary or like kind of funny scary vibes');
+  const [similar, setSimilar] = useState([2,3]);
+  const [mediaType, setMediaType] = useState('tv')
   const [titleList, setTitleList] = useState({});
-
-  /*
-  THE CODE WORKS, IT'S JUST THAT WHEN YOU TYPE IN A PROMPT, 
-  IT HAS TO HIT KEYWORDS FOR ACTUAL MOVIES OR ELSE TMDB WON'T RETURN ANYTHING.
-  WILL PROBABLY HAVE TO CALL THE OPENAI API TO GET LISTS OF MOVIES
-  */
 
   useEffect(() => {
     // Make a GET request to the Flask server
-    axios.get('/api/recommend_shows', {
+    axios.get('/api/recommend', {
       params: {
         prompt: prompt,
-        similar_ids: similar
+        similar_id: similar,
+        media_type: mediaType
       }
     })
       .then((response) => {

@@ -17,6 +17,9 @@ nltk.download('stopwords')
 
 client = OpenAI()
 
+# HELPER
+# Input: user prompt
+# Output: important keywords from the prompt
 def extract_keywords(prompt):
     prompt = prompt.lower()
 
@@ -27,6 +30,9 @@ def extract_keywords(prompt):
 
     return keywords
 
+# HELPER
+# Input: important keywords from user prompt
+# Output: list of 25 recommended tv shows
 def call_openai(prompt):
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -46,6 +52,9 @@ def call_openai(prompt):
 
     return(tv_shows)
 
+# HELPER
+# Input: user prompt
+# Output: json list of shows from tmdb database
 def search_shows(prompt):
     keywords = extract_keywords(prompt)
     query = " ".join(keywords)
@@ -72,6 +81,9 @@ def search_shows(prompt):
             print(f"Error fetching data for {show}: {response.status_code}, {response.text}")
     return top_shows
 
+# HELPER
+# Input: show tv_id corresponding to tmdb database
+# Output: a json list of similar shows
 def get_similar_shows(tv_id):
     url = f"https://api.themoviedb.org/3/tv/{tv_id}/similar"
     params = {
@@ -86,6 +98,8 @@ def get_similar_shows(tv_id):
         print(f"Error: {response.status_code}, {response.text}")
         return []
 
+# Input: user prompt and list of similar show ids
+# Output: 25 shows sorted in recommendation order
 def recommend_shows(prompt, similar_show_ids):
     search_results = search_shows(prompt)
 
@@ -98,3 +112,19 @@ def recommend_shows(prompt, similar_show_ids):
     sorted_results = sorted(combined_results, key=lambda x: x.get("vote_average", 0), reverse=True)
 
     return sorted_results[:25]
+
+def search(name, media_type):
+    if media_type == "movie" or media_type == "tv":
+        url = "https://api.themoviedb.org/3/search/{media_type}"
+        params = {
+            "api_key": TMDB_API_KEY,
+            "query": name,
+            "language": "en-US",
+            "page": 1
+        }
+        response = requests.get(url, params=params)
+        if response.status_code == 200:
+            return response.json()["results"]
+        else:
+            print(f"Error: {response.status_code}, {response.text}")
+            return []
