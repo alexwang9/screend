@@ -29,3 +29,48 @@ def recommendations():
         recommendations = recommend_manga(prompt)
     
     return jsonify(recommendations)
+
+# movie json object:
+# {
+#     adult: boolean
+#     backdrop_path: string
+#     genre_ids: array of integers
+#     id: integer
+#     original_language: string
+#     original_title: string
+#     overview: string
+#     popularity: number
+#     poster_path: string (i think this is the image)
+#     title: string
+#     video: boolean
+#     vote_average: number
+#     vote_count: integer
+# }
+
+# show json object:
+# {
+#     adult: boolean
+#     backdrop_path: string
+#     genre_ids: array of integers
+#     id: integer
+#     original_country: array of strings
+#     original_language: string
+#     original_name: string
+#     overview: string
+#     popularity: number
+#     poster_path: string (i think this is the image)
+#     first_air_date: string
+#     name: string
+#     vote_average: number
+#     vote_count: integer
+# }
+
+# anime json object:
+# {
+#     'id': int,
+#     'title': string or 'N/A',
+#     'genres': array of strings,
+#     'description': string,
+#     'averageScore': int,
+#     'coverImage': string (probably the path to the image)
+# }
