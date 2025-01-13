@@ -1,18 +1,27 @@
 import {useState} from "react";
 
-const Considerations = ({selectedOption}) => {
-    const [considerations, setConsiderations] = useState([]);
+const Considerations = ({ selectedOption, setConsiderations }) => {
     const [inputValue, setInputValue] = useState("");
+    const [considerations, setLocalConsiderations] = useState([]);
+
+    const boxColor = {
+        Show: "#5DA58B",
+        Movie: "#5D73A5",
+        // Manga: "#E5A5C2",
+        Anime: "#A58B5D",
+    };
 
     const handleKeyPress = (event) => {
         if (event.key === "Enter" && inputValue.trim() !== "") {
-          setConsiderations((prev) => [...prev, inputValue.trim()]); // Add item to array
+          setConsiderations((prev) => [...prev, inputValue.trim()]);
+          setLocalConsiderations((prev) => [...prev, inputValue.trim()]); // Add item to array
           setInputValue(""); // Clear input field
         }
     };
 
     const removeConsideration = (itemToRemove) => {
-        setConsiderations((prev) => prev.filter((item) => item !== itemToRemove)); // Remove item
+        setConsiderations((prev) => prev.filter((item) => item !== itemToRemove));
+        setLocalConsiderations((prev) => prev.filter((item) => item !== itemToRemove)); // Remove item
     };
 
     const article = selectedOption.toLowerCase() === "anime" ? "an" : "a";
@@ -32,6 +41,8 @@ const Considerations = ({selectedOption}) => {
             <div
                 key={index}
                 style={{
+                background: boxColor[selectedOption],
+                color: "#FFFFFF",
                 display: "flex",
                 alignItems: "center",
                 padding: "5px 10px",
@@ -47,7 +58,7 @@ const Considerations = ({selectedOption}) => {
                     marginLeft: "10px",
                     background: "none",
                     border: "none",
-                    color: "red",
+                    color: "#FFFFFF",
                     cursor: "pointer",
                     fontWeight: "bold",
                 }}
@@ -62,4 +73,4 @@ const Considerations = ({selectedOption}) => {
     );
 };
 
-export default Considerations
+export default Considerations;
