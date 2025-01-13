@@ -19,7 +19,7 @@ const Header = ({selectedOption, handleOptionSelect}) => {
           style={{
             backgroundColor: "#f4f4f4",
             color: optionColor[selectedOption] || "#000000",
-            border: "1px solid ${optionColor[selectedOption]}",
+            border: `1px solid ${optionColor[selectedOption]}`,
           }}> {selectedOption}
         </button>
         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">

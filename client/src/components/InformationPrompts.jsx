@@ -1,27 +1,29 @@
 import "../styles/laptop.css"
+import Considerations from "./Considerations"
 
 const InformationPrompts = ({selectedOption}) => {
-    return (<div
+    const margin = selectedOption.toLowerCase() === "manga" ? "186" : "75";
+  
+    return (
+    <div
       style={{
+        position: "relative",
         backgroundColor: "#f8f9fa",
-        padding: "45px",
+        padding: "42px",
         height: "100%",
-        borderRadius: "10px",
-        marginBottom: "3px",
+        borderRadius: "15px 15px 0 0",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <label className="form-label"> What vibe are you feeling? </label>
-      <input type="text" className ="form-control mb-3"
+      <input type="text" className ="form-control mb-4"
           placeholder="I want something lighter and funny that'll cheer me up!" />
 
-      {selectedOption.toLowerCase() !== "manga" && (
-      <>
-      <label className="form-label" style = {{paddingTop: "15px"}}> Any similar {selectedOption.toLowerCase()}s you want us to consider? </label>
-      <input type="text" className ="form-control mb-3" 
-          placeholder= {`Enter a ${selectedOption.toLowerCase()} and hit return`} />
-      </>)}
+      {selectedOption.toLowerCase() !== "manga" && <Considerations selectedOption = {selectedOption}/>}
+
       <div class = "button-container" >
-        <button className="btn btn-custom" style = {{marginTop: "25px"}} >Give me recommendations!</button>
+        <button className="btn btn-custom" style = {{marginTop: `${margin}px`}} >Give me recommendations!</button>
       </div>
     </div>
     );
