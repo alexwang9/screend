@@ -65,7 +65,7 @@ def recommendations():
 #     vote_count: integer
 # }
 
-# anime json object:
+# manga json object:
 # {
 #     'id': int,
 #     'title': string or 'N/A',
